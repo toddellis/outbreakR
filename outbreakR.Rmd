@@ -10,6 +10,8 @@ output:
 
 Please feel free to e-mail me any comments, suggestions, or bug-fixes. Thanks for downloading! :)
 
+If you're coming from RPubs or elsewhere and need the example datasets, visit either https://bitbucket.org/toddellis/outbreakr or https://github.com/toddellis/outbreakR.
+
 ## Setup
 
 Before running any of this, don't forget to customize the working directory!
