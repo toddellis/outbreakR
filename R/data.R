@@ -10,7 +10,7 @@
 #' \dontrun{
 #'  ob_host
 #' }
-"ob_host"
+ob_host
 
 #' First principal component forming a master chronology from four ponderosa pine sites in the Okanogan Highlands, WA, USA
 #'
@@ -24,4 +24,4 @@
 #' \dontrun{
 #'  ob_nonhost
 #' }
-"ob_nonhost"
+ob_nonhost
