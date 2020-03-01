@@ -31,7 +31,116 @@ devtools::install_github("toddellis/outbreakR")
 ```
 ## Using outbreakR
 
+`outbreakR` comes with two demo datasets:
+
+1. `ob_host`: A host dataset comprised of tree-level ring-width indices from Douglas-fir trees sampled across four study sites in 2014.
+2. `ob_nonhost`: A nonhost master chronology -- the first principal component -- built from ponderosa pine trees sampled across study sites from the same region.
+
+
 ```{r example}
 library(outbreakR)
-head(ob_host)
+tibble::glimpse(ob_host)
+tibble::glimpse(ob_nonhost)
 ```
+
+### Corrected indices
+
+To extract insect outbreak data, `outbreakR` uses two simple functions. The first produces **corrected indices** by removing climatic noise from the host tree-level data, leaving an assumed biological signal.
+
+The default settings assume wide-format data, as expected from the output of `dplR`'s RWI functions. 
+
+Just be aware of the additional settings for `cor_index()`.
+
+```{r}
+foo <- cor_index(ob_host, ob_nonhost)
+
+head(foo)
+```
+
+As an alternative, it also takes long-format data:
+
+```{r}
+ob_host %>%
+  gather('id', 'rwi', -year) %>%
+  cor_index(., 
+            ob_nonhost,
+            format = 'long') %>%
+  head()
+```
+
+Many dendrochronological datasets come in wide format rather than long, and treat years as the row names. This can also be handled here, but it's really recommended that you avoid deprecated data formats like this:
+
+```{r}
+## Reformat both host and nonhost to mimic older formatting
+host_old <- ob_host %>%
+  as.data.frame()
+row.names(host_old) <- host_old$year
+host_old <- host_old %>%
+  dplyr::select(-year)
+
+nonhost_old <- ob_nonhost %>%
+  as.data.frame()
+row.names(nonhost_old) <- nonhost_old$year
+nonhost_old <- nonhost_old %>%
+  dplyr::select(-year)
+
+head(host_old)
+
+## Specify years_as_rownames = TRUE
+cor_index(host_old, nonhost_old, years_as_rownames = T) %>%
+  head()
+
+foo %>%
+  ggplot(aes(x = year, y = ci)) +
+  theme_classic() +
+  geom_point(alpha = 0.05) +
+  geom_smooth(method = 'gam', 
+              formula = y ~ s(x, k = 12),
+              color = 'darkred',
+              fill = 'hotpink')
+```
+
+### Outbreak reconstructions
+
+The `outbreak` function extracts either binary outbreak/non-outbreak time series data at the tree level, or produces proportional outbreaks showing the percentage of trees with an outbreak in a given year.
+
+```{r}
+outbreak(foo) %>%
+  tail(10)
+
+outbreak(foo, prop = FALSE) %>%
+  tail(10)
+```
+
+We can extract the sites here and run it individually per site. I may try to implement this in the future, but for now, this would provide a workaround:
+
+```{r}
+## add site variable
+foo <- foo %>%
+  mutate(site = substr(tree_id, 1, 3)) 
+## pull out unique sites
+sites <- foo %>%
+  .$site %>%
+  unique()
+
+## create empty list to fill
+site_outbreaks <- list()
+
+## loop through site list
+for (i in 1:length(sites)) {
+  site_outbreaks[[i]] <- foo %>%
+    filter(site == sites[i]) %>%
+    outbreak() %>%
+    mutate(site = sites[i])
+}
+
+site_outbreaks <- bind_rows(site_outbreaks)
+
+site_outbreaks %>%
+  ggplot(aes(x = year, y = outbreakProp, color = site)) +
+  geom_line() +
+  theme_classic()
+```
+
+Quite hideous at this stage, but will be fixed a bit in the next update.
+
