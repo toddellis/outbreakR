@@ -1,13 +1,15 @@
 Package: outbreakR
-Title: What the Package Does (One Line, Title Case)
+Title: Dendrochronological outbreak reconstructions in R
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Todd",
+           family = "Ellis",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+           email = "toddellis.wa@gmail.com",
+           comment = c(ORCID = "0000-0002-4410-8676"))
+Description: Offers functions for transforming dendrochronological
+    time series data into corrected indices, and reconstructing 
+    insect outbreak histories.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
