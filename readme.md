@@ -35,3 +35,5 @@ I also wanted to better understand what these methods were accomplishing, and th
 Installation
 ------
 I advise using the most recent versions of R and RStudio. Additionally, the packages `dplR` and `data.table` are used within these functions, with `ggplot2` used for example images.
+
+(2016-10-16)
