@@ -1,15 +1,17 @@
 Package: outbreakR
 Title: Dendrochronological outbreak reconstructions in R
-Version: 0.0.0.9000
+Version: 0.1.0.9000
 Authors@R: 
-    person(given = "Todd",
+    person(given = "T. Michael",
            family = "Ellis",
-           role = c("aut", "cre"),
+           role = c("aut", "cre", "cph"),
            email = "toddellis.wa@gmail.com",
            comment = c(ORCID = "0000-0002-4410-8676"))
 Description: Offers functions for transforming dendrochronological
     time series data into corrected indices, and reconstructing 
     insect outbreak histories.
+URL: http://github.com/toddellis/outbreakR
+BugReports: https://github.com/toddellis/outbreakR/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -17,5 +19,6 @@ Imports:
     data.table,
     magrittr,
     dplyr,
-    tibble
+    stringr,
+    tidyr
 RoxygenNote: 6.1.1

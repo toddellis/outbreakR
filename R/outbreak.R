@@ -19,18 +19,18 @@
 #'
 #' foo <- cor_index( ob_host, ob_nonhost))
 #' sites <- foo %>%
-#'   mutate( site = substr( tree_id, 1, 3)) %>%
+#'   dplyr::mutate( site = substr( tree_id, 1, 3)) %>%
 #'   .$site %>%
 #'   unique()
 #' bar <- list()
 #' for (i in 1:length(sites)) {
 #'   bar[[i]] <- foo %>%
-#'     mutate(site = substr(tree_id, 1, 3)) %>%
-#'     filter(site == groups[i]) %>%
+#'     dplyr::mutate(site = substr(tree_id, 1, 3)) %>%
+#'     dplyr::filter(site == groups[i]) %>%
 #'     outbreak() %>%
-#'     mutate(site = groups[i])
+#'     dplyr::mutate(site = groups[i])
 #' }
-#' outbreaks <- bind_rows(bar)
+#' outbreaks <- dplyr::bind_rows(bar)
 #'}
 outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
 
@@ -45,11 +45,11 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
   ci2 <- ci %>%
     group_by( tree_id) %>%
     # creates binary low-growth timeseries
-    mutate( conYrs = ifelse( ( ci < 0 | data.table::shift( ci, 1, type = "lag") < 0) *
+    dplyr::mutate( conYrs = ifelse( ( ci < 0 | data.table::shift( ci, 1, type = "lag") < 0) *
                                ( ci < 0 | data.table::shift( ci, 1, type = "lead") < 0),
                              1, 0)) %>%
     # creates running count from binary data
-    mutate( conYrs = sequence( rle( conYrs)$lengths) * conYrs)
+    dplyr::mutate( conYrs = sequence( rle( conYrs)$lengths) * conYrs)
 
   ## n.b. the following corrects for a possible bug,
   ## where a handful of NAs are created at the earliest year
@@ -72,7 +72,7 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
     if( min == 2) {
       ci2 <- ci2 %>%
         group_by( tree_id) %>%
-        mutate( outbreakBinary = ifelse( conYrs > 2 - 1 ||
+        dplyr::mutate( outbreakBinary = ifelse( conYrs > 2 - 1 ||
                                            data.table::shift( conYrs, 1, type = "lead") >= 2,
                                          1, 0))
     }
@@ -81,7 +81,7 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
     if( min == 3) {
       ci2 <- ci2 %>%
         group_by( tree_id) %>%
-        mutate( outbreakBinary = ifelse( conYrs > 3 - 1 |
+        dplyr::mutate( outbreakBinary = ifelse( conYrs > 3 - 1 |
                                            data.table::shift( conYrs, 1, type = "lead") >= 3 |
                                            data.table::shift( conYrs, 2, type = "lead") >= 3,
                                          1, 0))
@@ -91,7 +91,7 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
     if( min == 4) {
       ci2 <- ci2 %>%
         group_by( tree_id) %>%
-        mutate( outbreakBinary = ifelse( conYrs > 4 - 1 |
+        dplyr::mutate( outbreakBinary = ifelse( conYrs > 4 - 1 |
                                            data.table::shift( conYrs, 1, type = "lead") >= 4 |
                                            data.table::shift( conYrs, 2, type = "lead") >= 4 |
                                            data.table::shift( conYrs, 3, type = "lead") >= 4,
@@ -102,7 +102,7 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
     if( min == 5) {
       ci2 <- ci2 %>%
         group_by( tree_id) %>%
-        mutate( outbreakBinary = ifelse( conYrs > 5 - 1 |
+        dplyr::mutate( outbreakBinary = ifelse( conYrs > 5 - 1 |
                                            data.table::shift( conYrs, 1, type = "lead") >= 5 |
                                            data.table::shift( conYrs, 2, type = "lead") >= 5 |
                                            data.table::shift( conYrs, 3, type = "lead") >= 5 |
@@ -114,7 +114,7 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
     if( min == 6) {
       ci2 <- ci2 %>%
         group_by( tree_id) %>%
-        mutate( outbreakBinary = ifelse( conYrs > 6 - 1 |
+        dplyr::mutate( outbreakBinary = ifelse( conYrs > 6 - 1 |
                                            data.table::shift( conYrs, 1, type = "lead") >= 6 |
                                            data.table::shift( conYrs, 2, type = "lead") >= 6 |
                                            data.table::shift( conYrs, 3, type = "lead") >= 6 |
@@ -127,7 +127,7 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
     if( min == 7) {
       ci2 <- ci2 %>%
         group_by( tree_id) %>%
-        mutate( outbreakBinary = ifelse( conYrs > 7 - 1 |
+        dplyr::mutate( outbreakBinary = ifelse( conYrs > 7 - 1 |
                                            data.table::shift( conYrs, 1, type = "lead") >= 7 |
                                            data.table::shift( conYrs, 2, type = "lead") >= 7 |
                                            data.table::shift( conYrs, 3, type = "lead") >= 7 |
@@ -141,7 +141,7 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
     if( min == 8) {
       ci2 <- ci2 %>%
         group_by( tree_id) %>%
-        mutate( outbreakBinary = ifelse( conYrs > 8 - 1 |
+        dplyr::mutate( outbreakBinary = ifelse( conYrs > 8 - 1 |
                                            data.table::shift( conYrs, 1, type = "lead") >= 8 |
                                            data.table::shift( conYrs, 2, type = "lead") >= 8 |
                                            data.table::shift( conYrs, 3, type = "lead") >= 8 |
@@ -156,7 +156,7 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
     if( min == 9) {
       ci2 <- ci2 %>%
         group_by( tree_id) %>%
-        mutate( outbreakBinary = ifelse( conYrs > 9 - 1 |
+        dplyr::mutate( outbreakBinary = ifelse( conYrs > 9 - 1 |
                                            data.table::shift( conYrs, 1, type = "lead") >= 9 |
                                            data.table::shift( conYrs, 2, type = "lead") >= 9 |
                                            data.table::shift( conYrs, 3, type = "lead") >= 9 |
@@ -172,7 +172,7 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
     if( min == 10) {
       ci2 <- ci2 %>%
         group_by( tree_id) %>%
-        mutate( outbreakBinary = ifelse( conYrs > 10 - 1 |
+        dplyr::mutate( outbreakBinary = ifelse( conYrs > 10 - 1 |
                                            data.table::shift( conYrs, 1, type = "lead") >= 10 |
                                            data.table::shift( conYrs, 2, type = "lead") >= 10 |
                                            data.table::shift( conYrs, 3, type = "lead") >= 10 |
@@ -200,10 +200,10 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
       # personal learning experience: prior tree_id grouping carried over!
       ungroup() %>%
       # uses binary outbreak data to group periods of outbreak and non-outbreak
-      mutate( obGroups = cumsum( c( 0, abs( diff( outbreakBinary))))) %>%
+      dplyr::mutate( obGroups = cumsum( c( 0, abs( diff( outbreakBinary))))) %>%
       group_by( obGroups) %>%
       # at least one year of each outbreak period must fall below the set standard deviation
-      mutate( outbreak = ( as.numeric( any( ci < sd)) * outbreakBinary)) %>%
+      dplyr::mutate( outbreak = ( as.numeric( any( ci < sd)) * outbreakBinary)) %>%
       ungroup()
 
   } else {
@@ -222,7 +222,8 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
 
   } else {
 
-    ci2
+    ci2  %>%
+      dplyr::select(-conYrs, -outbreakBinary, -obGroups)
 
   }
 

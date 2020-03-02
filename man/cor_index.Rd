@@ -27,7 +27,7 @@ host tree.
 \dontrun{
 cor_index(ob_host, ob_nonhost)
 cor_index(ob_host \%>\%
-            gather('id', 'rwi', -Year),
+            tidyr::gather('id', 'rwi', -Year),
           ob_nonhost,
           format = 'long')
 }

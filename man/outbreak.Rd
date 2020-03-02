@@ -26,17 +26,17 @@ outbreak( cor_index( ob_host, ob_nonhost))
 
 foo <- cor_index( ob_host, ob_nonhost))
 sites <- foo \%>\%
-  mutate( site = substr( tree_id, 1, 3)) \%>\%
+  dplyr::mutate( site = substr( tree_id, 1, 3)) \%>\%
   .$site \%>\%
   unique()
 bar <- list()
 for (i in 1:length(sites)) {
   bar[[i]] <- foo \%>\%
-    mutate(site = substr(tree_id, 1, 3)) \%>\%
-    filter(site == groups[i]) \%>\%
+    dplyr::mutate(site = substr(tree_id, 1, 3)) \%>\%
+    dplyr::filter(site == groups[i]) \%>\%
     outbreak() \%>\%
-    mutate(site = groups[i])
+    dplyr::mutate(site = groups[i])
 }
-outbreaks <- bind_rows(bar)
+outbreaks <- dplyr::bind_rows(bar)
 }
 }
