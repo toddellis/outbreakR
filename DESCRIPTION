@@ -1,6 +1,8 @@
 Package: outbreakR
 Title: Dendrochronological outbreak reconstructions in R
 Version: 0.1.1.9000
+Date: 2020-03-01
+Year: 2020
 Authors@R: 
     person(given = "T. Michael",
            family = "Ellis",
