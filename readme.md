@@ -235,7 +235,7 @@ foo %>%
               fill = 'hotpink')
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
 
 ### Outbreak reconstructions
 
@@ -262,22 +262,31 @@ outbreak(foo) %>%
 
 outbreak(foo, prop = FALSE) %>%
   tail(10)
-#> # A tibble: 10 x 9
-#>     year tree_id  host nonhost      ci conYrs
-#>    <dbl> <chr>   <dbl>   <dbl>   <dbl>  <dbl>
-#>  1  2005 VLD15   0.699  -0.624 -0.494       2
-#>  2  2006 VLD15   0.864  -2.29   1.18        3
-#>  3  2007 VLD15   0.427  -2.53  -0.0447      4
-#>  4  2008 VLD15   0.617  -1.95   0.161       5
-#>  5  2009 VLD15   0.652  -1.23  -0.224       6
-#>  6  2010 VLD15   0.858   0.626 -0.854       7
-#>  7  2011 VLD15   1.01    0.480 -0.276       8
-#>  8  2012 VLD15   0.409   2.14  -3.32        9
-#>  9  2013 VLD15   0.482   2.52  -3.35       10
-#> 10  2014 VLD15   0.972   1.77  -1.28       11
-#> # ... with 3 more variables: outbreakBinary <dbl>,
-#> #   obGroups <dbl>, outbreak <dbl>
+#> # A tibble: 10 x 6
+#>     year tree_id  host nonhost      ci outbreak
+#>    <dbl> <chr>   <dbl>   <dbl>   <dbl>    <dbl>
+#>  1  2005 VLD15   0.699  -0.624 -0.494         1
+#>  2  2006 VLD15   0.864  -2.29   1.18          1
+#>  3  2007 VLD15   0.427  -2.53  -0.0447        1
+#>  4  2008 VLD15   0.617  -1.95   0.161         1
+#>  5  2009 VLD15   0.652  -1.23  -0.224         1
+#>  6  2010 VLD15   0.858   0.626 -0.854         1
+#>  7  2011 VLD15   1.01    0.480 -0.276         1
+#>  8  2012 VLD15   0.409   2.14  -3.32          1
+#>  9  2013 VLD15   0.482   2.52  -3.35          1
+#> 10  2014 VLD15   0.972   1.77  -1.28          1
+
+outbreak(foo, prop = FALSE) %>%
+  mutate(site = substr(tree_id, 1, 3)) %>%
+  group_by(site, year) %>%
+  summarise(infected_trees = sum(outbreak)) %>%
+  ggplot(aes(x = year, y = infected_trees, color = site)) +
+  theme_classic() + 
+  geom_point(alpha = 0.1) + 
+  geom_line(size = 1.2, alpha = 0.4)
 ```
+
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
 We can extract the sites here and run it individually per site. I may
 try to implement this in the future, but for now, this would provide a
@@ -311,6 +320,6 @@ site_outbreaks %>%
   theme_classic()
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
 
 Quite hideous at this stage, but will be fixed a bit in the next update.

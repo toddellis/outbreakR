@@ -220,9 +220,9 @@ outbreak <- function( ci, min = 4, sd = -1.28, prop = TRUE) {
       group_by( year) %>%
       summarize( outbreakProp = mean( outbreak) * 100)
 
-  } else {
+  } else if( prop == FALSE) {
 
-    ci2  %>%
+    ci2 <- ci2  %>%
       dplyr::select(-conYrs, -outbreakBinary, -obGroups)
 
   }
